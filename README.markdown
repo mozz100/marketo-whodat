@@ -1,3 +1,6 @@
+While using Marketo's Munchkin API I realised how nice it would be to be able to fetch info about the currently-browsing user, and alter the page to suit.
+Turns out Munchkin doesn't have this ability yet, so I adapted some code from the Marketo Community site to get the job done.
+
 PHP code here calls the Marketo SOAP API and looks up the current user based on their marketo cookie.
 If your pages are already built dynamically and you're ok with the speed hit, you could just use the info as you're building the page.
 It was too slow for me, so instead, I wrote my PHP to return the info in JSON format.
