@@ -91,7 +91,7 @@ class MarketoApi
 	 * @param str $key_value
 	 * @return object The Marketo lead record information
 	 **/
-	public function getLead($key_type, $key_value, $options)
+	public function getLead($key_type, $key_value, $options = array())
 	{
 		$key = array(
 			'leadKey' => array(

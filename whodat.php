@@ -38,7 +38,7 @@ function get_whodat_status($cookie = 'whodat')
 			$cookie_type = 'session';
 
 			$marketo_api = new MarketoAPI();
-			$result = $marketo_api->getLead('COOKIE', $_COOKIE['_mkto_trk'], []);
+			$result = $marketo_api->getLead('COOKIE', $_COOKIE['_mkto_trk']);
             $data = $result->result->leadRecordList->leadRecord;
             $whodat = array("Id" => $data->Id, "Email" => $data->Email);
             // can we get a name?
