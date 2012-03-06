@@ -13,7 +13,7 @@ print get_whodat_status();
 function get_whodat_status($cookie = 'whodat')
 {
   
-  include_once 'settings.php';
+  include 'settings.php';
 
 	$retval = '{"result": false}';
 	if (isset($_COOKIE[$cookie]))

@@ -14,7 +14,7 @@ class MarketoApi
 	
 	public function __construct()
 	{
-		include_once('settings.php');
+		include 'settings.php';
 		//
 		// Your access key, secret key, and SOAP Endpoint are all available in the
 		// Admin section of the Marketo Lead Management appliaction under "SOAP API Setup"
