@@ -12,8 +12,11 @@ print get_whodat_status();
 */
 function get_whodat_status($cookie = 'whodat')
 {
+  
+  include_once 'settings.php';
+
 	$retval = '{"result": false}';
-	if (1==1 && isset($_COOKIE[$cookie]))
+	if (isset($_COOKIE[$cookie]))
 	{
 		// If the cookie is set, return its value.
         if (get_magic_quotes_gpc() == true) {
@@ -32,13 +35,10 @@ function get_whodat_status($cookie = 'whodat')
 			include_once('class.marketoapi.php');
 
 			// What cookie type do we need to set?
-			// Valid types are:
-			//  - permanant
-			//  - session
-			$cookie_type = '';
+			$cookie_type = 'session';
 
 			$marketo_api = new MarketoAPI();
-			$result = $marketo_api->getLead('COOKIE', $_COOKIE['_mkto_trk']);
+			$result = $marketo_api->getLead('COOKIE', $_COOKIE['_mkto_trk'], []);
             $data = $result->result->leadRecordList->leadRecord;
             $whodat = array("Id" => $data->Id, "Email" => $data->Email);
             // can we get a name?
@@ -52,27 +52,7 @@ function get_whodat_status($cookie = 'whodat')
             
             $retval = json_encode($a);
 			
-            // If the response looks valid we check for a valid email address in the response.
-			if (TRUE === $marketo_api->doesResponseLookValid($result))
-			{
-                $cookie_type = 'session';
-            }
-            else
-            {
-                $cookie_type = 'session';
-            }
-			
-			// set the cookie so it can be accessed by all subdomains.
-			$cookie_domain = '.owlstonenanotech.com';
-
-			if ('permanant' == $cookie_type)
-			{
-				setcookie($name = $cookie, $value = json_encode($whodat), $expire = (time() + (60 * 60 * 24 * 365)), $path = '/', $domain = $cookie_domain);
-			}
-			else if ('session' == $cookie_type)
-			{
-				setcookie($name = $cookie, $value = json_encode($whodat), $expire = 0, $path = '/', $domain = $cookie_domain);
-			}
+			setcookie($name = $cookie, $value = json_encode($whodat), $expire = 0, $path = '/', $domain = $cookie_domain); // configure cookie_domain in settings.php
 		}
 		else
 		{

@@ -1,11 +1,6 @@
 <?php
 
 
-//
-// Set this appropriately for your time zone
-//
-date_default_timezone_set('Europe/London');
-
 /**
 * MarketoAPI
 */
@@ -96,7 +91,7 @@ class MarketoApi
 	 * @param str $key_value
 	 * @return object The Marketo lead record information
 	 **/
-	public function getLead($key_type, $key_value)
+	public function getLead($key_type, $key_value, $options)
 	{
 		$key = array(
 			'leadKey' => array(

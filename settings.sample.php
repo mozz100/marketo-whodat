@@ -1,5 +1,13 @@
 <?php 
     //
+    // Set this appropriately for your time zone
+    //
+    date_default_timezone_set('Europe/London');
+
+    // Set this appropriately for your website.  The leading . is significant...
+    $cookie_domain = '.example.com';
+
+    //
     // Your access key, secret key, and SOAP Endpoint are all available in the
     // Admin section of the Marketo Lead Management appliaction under "SOAP API Setup"
     //
