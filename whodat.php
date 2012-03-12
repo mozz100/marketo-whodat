@@ -1,4 +1,5 @@
 <?php
+
 print get_whodat_status();
 
 /**
@@ -10,57 +11,65 @@ print get_whodat_status();
 * @param string $cookie
 * @return whodat data (JSON)
 */
+
 function get_whodat_status($cookie = 'whodat')
 {
   
-  include 'settings.php';
+  include 'settings.php';  // load in variables containing Marketo secret key, etc.
 
-	$retval = '{"result": false}';
-	if (isset($_COOKIE[$cookie]))
-	{
-		// If the cookie is set, return its value.
-        if (get_magic_quotes_gpc() == true) {
-            $whodat_json = stripslashes($_COOKIE[$cookie]);
-        } else {
-            $whodat_json = $_COOKIE[$cookie];
-        }
-		$retval = json_encode(array("result" => true, "from" => "cookie", "data" => json_decode($whodat_json)));
-	}
-	else
-	{
-		// We access the Marketo API with the user's Marketo cookie to see who they are
-		if(isset($_COOKIE['_mkto_trk']))
-		{
-			// We only include the Marketo API class if it's needed.
-			include_once('class.marketoapi.php');
+  if (isset($_COOKIE[$cookie]))
+  {
+    // If the whodat cookie is already set, return its value.
+    // Ideally, the cookie would just be a pointer/ID reference to something like memcache, or a 
+    // database.  On our site we don't have that easily available, so for now just lazily store the
+    // JSON in a cookie.
 
-			// What cookie type do we need to set?
-			$cookie_type = 'session';
+    // decode what's stored in the cookie and wrap it in some status JSON, returning 
+    return json_encode(array(
+      "result" => true,
+      "from" => "cookie",
+      "data" => json_decode($_COOKIE[$cookie])
+    ));
+  }
+  else {
+    // We access the Marketo API with the user's Marketo cookie to see who they are
+    if(isset($_COOKIE['_mkto_trk'])) {
+      // We only include the Marketo API class if it's needed.
+      include_once('class.marketoapi.php');
 
-			$marketo_api = new MarketoAPI();
-			$result = $marketo_api->getLead('COOKIE', $_COOKIE['_mkto_trk']);
-            $data = $result->result->leadRecordList->leadRecord;
-            $whodat = array("Id" => $data->Id, "Email" => $data->Email);
-            // can we get a name?
-            foreach ($data->leadAttributeList->attribute as $attribute) {
-                //only record stuff we're truly interested in
-                if ((bool)array_search($attribute->attrName, array("{dummy}","FirstName","LastName","InferredCompany","InferredCountry","Company","Country"))) {
-                    $whodat[$attribute->attrName] = $attribute->attrValue;
-                }
-            };
-            $a = array("result" => true, "from" => "marketo", "data" => $whodat);
-            
-            $retval = json_encode($a);
-			
-			setcookie($name = $cookie, $value = json_encode($whodat), $expire = 0, $path = '/', $domain = $cookie_domain); // configure cookie_domain in settings.php
-		}
-		else
-		{
-			$retval = '{"result": true, "from": null, "data": null, "msg": "No Marketo cookie"}';
-		}
-	}
+      // What cookie type do we need to set?
+      $cookie_type = 'session';
 
-	return $retval;
+      $marketo_api = new MarketoAPI();
+      $result = $marketo_api->getLead('COOKIE', $_COOKIE['_mkto_trk']);
+      $data = $result->result->leadRecordList->leadRecord;
+      $whodat = array("Id" => $data->Id, "Email" => $data->Email);
+      // can we get a name?
+      foreach ($data->leadAttributeList->attribute as $attribute) {
+          //only record stuff we're truly interested in
+          if ((bool)array_search($attribute->attrName, array("{dummy}","FirstName","LastName","InferredCompany","InferredCountry","Company","Country"))) {
+              $whodat[$attribute->attrName] = $attribute->attrValue;
+          }
+      };
+     
+      // Save a cookie containing the whodat data, so that there's no need to hit the Marketo API
+      // for future requests during this session.  (expire = 0)
+      // Remember to configure cookie_domain in settings.php.
+      setcookie($name = $cookie, $value = json_encode($whodat), $expire = 0, $path = '/', $domain = $cookie_domain);
+
+      return json_encode(array(
+        "result" => true, 
+        "from" => "marketo", 
+        "data" => $whodat
+      ));
+    }
+    else
+    {
+      return '{"result": true, "from": null, "data": null, "msg": "No Marketo cookie"}';
+    }
+  }
+
+  return '{"result": false}';  // tell the world that we found nothing.
 }
 
 ?>
