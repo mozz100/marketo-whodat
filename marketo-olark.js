@@ -6,7 +6,10 @@ function initStorefront() {
     whodat('/mkto/whodat.php');       // make sure to pass in the correct path to the PHP file
     
     // Also get Search data from Google Analytics and pass to oLark.
-    whatsearch();
+    // _gaq.push(fn) means execute the function after Google Analytics has finished doing its thing.
+    // Since we're within 'initStorefront' we can be sure that this is safe to do.  If GA hasn't loaded for
+    // any reason, this'll just be added to the end of its queue.
+    _gaq.push(whatsearch);
 }
 
 // readCookie, createCookie and eraseCookie from http://www.quirksmode.org/js/cookies.html
@@ -123,13 +126,8 @@ function whatsearch() {
                 snippet: 'This person searched for "' + unescape(ggl_vals.utmctr) + '"'
             });
         } else {
-            olark('api.chat.updateVisitorStatus', {
-                snippet: "This person didn't arrive from a known search engine."
-            });
+            // do nothing
         }
-    } else {
-        // if not, try again in 1 second
-        setTimeout(whatsearch, 1000);
     }
 }
 
