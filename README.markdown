@@ -1,4 +1,10 @@
-While using Marketo's Munchkin API I realised how nice it would be to be able to fetch info about the currently-browsing user, and alter the page to suit.
+While using Marketo's Munchkin API I realised how useful it would be to be able to fetch info about the currently-browsing user, and alter the page to suit.
+
+* personalise offers
+* restrict access to premium content
+* remind people to register for events they've not joined yet
+* and so on...
+
 Turns out Munchkin doesn't have this ability yet, so I adapted some code from the Marketo Community site to get the job done.
 
 PHP code here calls the Marketo SOAP API and looks up the current user based on their marketo cookie.
