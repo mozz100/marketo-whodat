@@ -36,13 +36,13 @@ Also, we can use oLark's !push command to send the visitor to a Marketo form, ca
 To use the Marketo-oLark integration:
 
 * include marketo-olark.js in your page (check that the URL for the PHP is correct within the .js file), ideally above the oLark code
-* below the oLark code, include this in your page (initStorefront is my name for the function that links Marketo and oLark together):
+* below the oLark code, include this in your page (oLark callbacks need to execute within an anon function, I haven't got to the bottom of that, yet):
 
 <pre>
 &lt;script type="text/javascript"&gt;
 // has to be on the page below/after olark code
-olark('api.box.onShow',initStorefront);
-olark('api.box.onHide',initStorefront);
+olark('api.box.onShow', function() { MarketoOlark.doIntegration(); });
+olark('api.box.onHide', function() { MarketoOlark.doIntegration(); });
 &lt;/script&gt;
 </pre>
 
