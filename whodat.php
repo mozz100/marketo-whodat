@@ -1,6 +1,19 @@
 <?php
 
+
+// enable JSONP - but remember, cookies have a domain scope too.
+$callback = $_GET['callback'];
+if ($callback) {
+  header('Content-type: text/javascript');
+  print "$callback(";
+} else {
+  header('Content-type: text/plain');
+}
+
 print get_whodat_status();
+
+// close JSONP callback function if necessary
+if ($callback) { print ");"; }
 
 /**
 * Check to see if they user is valid Marketo lead.
