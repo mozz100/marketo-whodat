@@ -2,7 +2,7 @@
 
 
 // enable JSONP - but remember, cookies have a domain scope too.
-$callback = $_GET['callback'];
+$callback = isset($_GET['callback']) ? $_GET['callback'] : false;
 if ($callback) {
   header('Content-type: text/javascript');
   print "$callback(";
