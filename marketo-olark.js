@@ -4,10 +4,10 @@
 var MarketoOlark = {
 
     doIntegration: function() {
-        // Get Marketo data and pass to oLark.
+        // Get Marketo data and pass to Olark.
         MarketoOlark.whodat('/mkto/whodat.php');       // make sure to pass in the correct path to the PHP file
         
-        // Also get Search data from Google Analytics and pass to oLark.
+        // Also get Search data from Google Analytics and pass to Olark.
         // _gaq.push(fn) means execute the function after Google Analytics has finished doing its thing.
         // Since we're within 'initStorefront' we can be sure that this is safe to do.  If GA hasn't loaded for
         // any reason, this'll just be added to the end of its queue.
@@ -26,7 +26,7 @@ var MarketoOlark = {
         return null;
     },
 
-    // Use the information retrieved from Marketo to update oLark.
+    // Use the information retrieved from Marketo to update Olark.
     // For docs on the Olark API, see http://www.olark.com/developer
     updateOlarkUserInfo: function(r) {
 
@@ -50,15 +50,15 @@ var MarketoOlark = {
                 // e.g. "Richard Morrison, Acaso Analytics, Marketo ID: 1234".
                 var olarkname = name + (company ? ', ' + company : '') + (mktoid ? ', Marketo ID: ' + mktoid : '');
                 
-                // ...and put it into oLark's FullName field.
+                // ...and put it into Olark's FullName field.
                 olark('api.visitor.updateFullName', {fullName: olarkname });
             } else {
-                // No name found.  Try and at least put their MarketoID into oLark
+                // No name found.  Try and at least put their MarketoID into Olark
                 if (mktoid) {
                     olark('api.visitor.updateFullName', {fullName: 'Marketo ID: ' + mktoid });
                 }
             }
-            // update oLark with the person's email address, if found in the Marketo data
+            // update Olark with the person's email address, if found in the Marketo data
             if (email) {
                 olark('api.visitor.updateEmailAddress', {emailAddress: email});
             }
@@ -82,7 +82,7 @@ var MarketoOlark = {
                 dataType: 'json', 
                 error: this.whodatError,
                 timeout: 30*1000,              // in ms
-                success: this.updateOlarkUserInfo   // on successful response, update oLark with data
+                success: this.updateOlarkUserInfo   // on successful response, update Olark with data
             });
         } else {
             // No, try again in 1 second == 1000 ms
@@ -91,7 +91,7 @@ var MarketoOlark = {
     },
 
     // What did this user search for in order to find our site?
-    // Google Analytics cookies have the answer.  Get the info and pass it to oLark.
+    // Google Analytics cookies have the answer.  Get the info and pass it to Olark.
     // Adapted from code on http://stackoverflow.com/questions/5631830/get-the-referrer-paid-natural-and-keywords-for-the-current-visitor-with-google
     whatsearch: function() {
         var utmz = this.readCookie('__utmz'); //using a cookie reading function
@@ -108,7 +108,7 @@ var MarketoOlark = {
                 return ga;
             })();
 
-            // ggl_vals.utmctr will contain the search phrase, if known.  Update oLark.
+            // ggl_vals.utmctr will contain the search phrase, if known.  Update Olark.
             if (ggl_vals.utmctr) {
                 olark('api.chat.updateVisitorStatus', {
                     snippet: 'This person searched for "' + unescape(ggl_vals.utmctr) + '"'
