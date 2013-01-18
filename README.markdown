@@ -24,19 +24,19 @@ How to use
 Example use
 ===========
 
-I've used this to link Marketo through to oLark (www.olark.com).  That means we can see:
+I've used this to link Marketo through to Olark (www.olark.com).  That means we can see:
 
 * who's on the website right now (names and emails, if Marketo knows 'em)
 * what they searched for
 * whether they've been before
 * which page they're viewing
 
-Also, we can use oLark's !push command to send the visitor to a Marketo form, capturing their details in an integrated fashion (they end up correctly associated in salesforce.com).
+Also, we can use Olark's !push command to send the visitor to a Marketo form, capturing their details in an integrated fashion (they end up correctly associated in salesforce.com).
 
-To use the Marketo-oLark integration:
+To use the Marketo-Olark integration:
 
-* include marketo-olark.js in your page (check that the URL for the PHP is correct within the .js file), ideally above the oLark code
-* below the oLark code, include this in your page (oLark callbacks need to execute within an anon function, I haven't got to the bottom of that, yet):
+* include marketo-olark.js in your page (check that the URL for the PHP is correct within the .js file), ideally above the Olark code
+* below the Olark code, include this in your page (Olark callbacks need to execute within an anon function, I haven't got to the bottom of that, yet):
 
 <pre>
 &lt;script type="text/javascript"&gt;
