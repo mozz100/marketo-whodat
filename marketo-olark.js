@@ -29,6 +29,7 @@ var MarketoOlark = {
     // Use the information retrieved from Marketo to update Olark.
     // For docs on the Olark API, see http://www.olark.com/developer
     updateOlarkUserInfo: function(r) {
+        var useMktoIDifNoName = false; // set to true if you want to see "Marketo ID: 12345" in absence of name
 
         // only try to do anything if Marketo has returned a positive result and we have data
         if (r.result && r.data) {
@@ -53,9 +54,12 @@ var MarketoOlark = {
                 // ...and put it into Olark's FullName field.
                 olark('api.visitor.updateFullName', {fullName: olarkname });
             } else {
-                // No name found.  Try and at least put their MarketoID into Olark
-                if (mktoid) {
-                    olark('api.visitor.updateFullName', {fullName: 'Marketo ID: ' + mktoid });
+                // No name found.
+                if (useMktoIDifNoName) {
+                    // Try and at least put their MarketoID into Olark
+                    if (mktoid) {
+                        olark('api.visitor.updateFullName', {fullName: 'Marketo ID: ' + mktoid });
+                    }
                 }
             }
             // update Olark with the person's email address, if found in the Marketo data
