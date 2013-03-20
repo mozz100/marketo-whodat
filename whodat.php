@@ -5,15 +5,20 @@
 $callback = isset($_GET['callback']) ? $_GET['callback'] : false;
 if ($callback) {
   header('Content-type: text/javascript');
-  print "$callback(";
 } else {
   header('Content-type: text/plain');
 }
 
-print get_whodat_status();
+$status = get_whodat_status();
 
-// close JSONP callback function if necessary
-if ($callback) { print ");"; }
+// enclose in JSONP callback function if necessary
+if ($callback) { 
+  print "$callback(";
+  print $status;
+  print ");";
+} else {
+  print $status;
+}
 
 /**
 * Check to see if they user is valid Marketo lead.
