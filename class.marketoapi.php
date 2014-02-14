@@ -131,7 +131,7 @@ class MarketoApi
 
 		try 
 		{
-			$retval  = $this->soap_client->__soapCall('syncLead', array("paramsSyncLead"), $options, $auth_header);
+			$retval  = $this->soap_client->__soapCall('syncLead', array("paramsSyncLead" => $leadRecord), $options, $auth_header);
 		}
 		catch (Exception $e)
 		{
