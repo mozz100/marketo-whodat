@@ -123,6 +123,32 @@ class MarketoApi
 		return $retval;
 		
 	}
+
+	public function syncLead($leadRecord, $options = array())
+	{
+
+		$auth_header = $this->_getAuthenticationHeader();
+
+		try 
+		{
+			$retval  = $this->soap_client->__soapCall('syncLead', array("paramsSyncLead"), $options, $auth_header);
+		}
+		catch (Exception $e)
+		{
+			if (isset($e->detail->serviceException->code)) 
+			{
+				$retval = FALSE;
+			}
+			else
+			{
+	      $this->sendEmail('Marketo SOAP Exception', $e);
+			}
+		}
+
+		return $retval;
+	}
+
+
 	
 	/**
 	 * See if the API response looks valid by testing for the bundle of returned attributes.
