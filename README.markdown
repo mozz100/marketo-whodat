@@ -46,6 +46,17 @@ olark('api.box.onHide', function() { MarketoOlark.doIntegration(); });
 &lt;/script&gt;
 </pre>
 
+
+#### How the Olark integration works
+
+The `whodat()` function (defined in `marketo-Olark.js`) is called repeatedly until it detects the Marketo cookie called `mkto_track`.
+
+When the Marketo cookie is known to be present, make an AJAX GET request to `whodat.php`.
+
+The browser will send the Marketo cookie to `whodat.php` as part of the GET request, and PHP can use the Marketo API to look up information about the user. It returns the information as JSON data.
+
+Javascript uses the JSON data and passes it to the `updateOlarkUserInfo` function, which uses Olark's API to share the data (first name, last name, company, country/inferred country) over to the chat.  If first name and last name are unknown, and `useMktoIDifNoName` is set (it defaults to `false`), then Olark is given the string `'Marketo ID: x'` as the full name instead.
+
 Licence
 -------
 
