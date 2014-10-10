@@ -49,7 +49,7 @@ olark('api.box.onHide', function() { MarketoOlark.doIntegration(); });
 
 #### How the Olark integration works
 
-The `whodat()` function (defined in `marketo-Olark.js`) is called repeatedly until it detects the Marketo cookie called `mkto_track`.
+The `whodat()` function (defined in `marketo-Olark.js`) is called repeatedly until it detects the Marketo cookie called `_mkto_track`.
 
 When the Marketo cookie is known to be present, make an AJAX GET request to `whodat.php`.
 
